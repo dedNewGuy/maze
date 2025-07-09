@@ -1,11 +1,7 @@
-#include <stdio.h>
+#ifndef GRID_H_
+#define GRID_H_
 
-#include "raylib.h"
-#include "util.h"
-
-#define WIN_WIDTH 800
-#define WIN_HEIGHT 600
-#define WIN_TITLE "MAZE SOLVER"
+#include "thirdparty/raylib.h"
 
 typedef struct {
 	int x;
@@ -85,18 +81,4 @@ void grid_dump(Grid_T grid)
 	printf("\n");
 }
 
-int main(void)
-{
-	InitWindow(WIN_WIDTH, WIN_HEIGHT, WIN_TITLE); 
-
-	Grid_T grid = grid_new(WIN_WIDTH, WIN_HEIGHT, 30, 30);
-
-	while (!WindowShouldClose()) {
-		BeginDrawing();
-		grid_render(grid);
-		EndDrawing();
-	}
-
-	CloseWindow();
-	return 0;
-}
+#endif // GRID_H_
