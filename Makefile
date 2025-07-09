@@ -1,5 +1,19 @@
-CC=cc
-CFLAGS=-Wall -Wextra
+CC = cc 
+CFLAGS = -Wall -Wextra -I./include -L./build/raylib
 
-maze: maze.c
-	$(CC) $(CFLAGS) -o maze maze.c
+BUILD = build
+
+BUILDS = $(BUILD)/maze.o
+SRCS = maze.c
+TARGET = maze
+
+$(BUILDS): $(SRCS)
+	$(CC) $(CFLAGS) -o $(BUILDS) -c $(SRCS)
+
+
+$(TARGET): $(BUILDS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(BUILDS) -lraylib -lm
+
+.PHONY=clean
+clean: 
+	rm $(BUILDS)
