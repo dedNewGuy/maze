@@ -14,6 +14,11 @@ $(BUILDS): $(SRCS)
 $(TARGET): $(BUILDS)
 	$(CC) $(CFLAGS) -o $(TARGET) $(BUILDS) -lraylib -lm
 
-.PHONY=clean
+.PHONY = clean run
+
+run: $(TARGET)
+	./$(TARGET)
+
 clean: 
 	rm $(BUILDS)
+	rm $(TARGET)
