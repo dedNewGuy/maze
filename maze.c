@@ -33,6 +33,7 @@ typedef struct {
 
 #define GRID_X_OFFSET 10
 #define GRID_Y_OFFSET 10
+#define GRID_LINE_THICK 1
 
 Grid_T grid_new(int win_w, int win_h, int cell_w, int cell_h)
 {
@@ -48,7 +49,9 @@ Grid_T grid_new(int win_w, int win_h, int cell_w, int cell_h)
 
 	for (int row = 0; row < y_cell_count; ++row) {
 		for (int col = 0; col < x_cell_count; ++col) {
-			Cell_T cell = cell_new(col*cell_w, row*cell_h, cell_w, cell_h);
+			int x = x_offset + col*cell_w;
+			int y = y_offset + row*cell_h;
+			Cell_T cell = cell_new(x, y, cell_w, cell_h);
 			min_da_append(&grid, cell);
 		}
 	}
@@ -56,7 +59,21 @@ Grid_T grid_new(int win_w, int win_h, int cell_w, int cell_h)
 	return grid;
 }
 
-void gen_dump(Grid_T grid)
+void grid_render(Grid_T grid)
+{
+
+	int line_thick = GRID_LINE_THICK;
+	for (int i = 0; i < grid.count; ++i) {
+		Cell_T cell = grid.items[i];
+		Rectangle rec = {
+			cell.x, cell.y,
+			cell.width, cell.height
+		};
+		DrawRectangleLinesEx(rec, line_thick, WHITE);
+	}
+}
+
+void grid_dump(Grid_T grid)
 {
 	for (int i = 0; i < grid.count; ++i) {
 		if (i % 5 == 0) {
@@ -70,17 +87,16 @@ void gen_dump(Grid_T grid)
 
 int main(void)
 {
-	// InitWindow(WIN_WIDTH, WIN_HEIGHT, WIN_TITLE); 
+	InitWindow(WIN_WIDTH, WIN_HEIGHT, WIN_TITLE); 
 
-	Grid_T grid = grid_new(WIN_WIDTH, WIN_HEIGHT, 4, 4);
-	gen_dump(grid);
+	Grid_T grid = grid_new(WIN_WIDTH, WIN_HEIGHT, 30, 30);
 
-	// while (!WindowShouldClose()) {
-	// 	BeginDrawing();
-	// 	DrawLineEx((Vector2){0, 0}, (Vector2){WIN_WIDTH, WIN_HEIGHT}, 2, WHITE);
-	// 	EndDrawing();
-	// }
-	//
-	// CloseWindow();
+	while (!WindowShouldClose()) {
+		BeginDrawing();
+		grid_render(grid);
+		EndDrawing();
+	}
+
+	CloseWindow();
 	return 0;
 }
