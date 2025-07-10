@@ -3,18 +3,45 @@
 #include "grid.h"
 #include "minutil.h"
 
-Cell_T cell_new(int x, int y, int cell_w, int cell_h)
+/// CELL STUFF ==================
+Wall_T wall_new(Rectangle rec)
 {
+	Line_T top, right, bottom, left;
+
+	Vector2 top_left  = {rec.x, rec.y};
+	Vector2 top_right = {rec.x + rec.width, rec.y};
+	Vector2 bot_left  = {rec.x, rec.y + rec.height};
+	Vector2 bot_right  = {rec.x + rec.width, rec.y + rec.height};
+
+	top.start_pos = top_left; top.end_pos = top_right;
+	right.start_pos = top_right; right.end_pos = bot_right;
+	bottom.start_pos = bot_left; bottom.end_pos = bot_right;
+	left.start_pos = top_left; left.end_pos = bot_left;
+
+	Wall_T wall = {
+		top,
+		right,
+		bottom,
+		left
+	};
+	return wall;
+}
+
+Cell_T cell_new(float x, float y, float cell_w, float cell_h)
+{
+	Rectangle rec = { x, y, cell_w, cell_h };
+	Wall_Flag_T wall_flag = { .top=true, .right=true, .bottom=true, .left=true };
+	Wall_T wall = wall_new(rec);
 	Cell_T cell = {
-		.x = x,
-		.y = y,
-		.width = cell_w, 
-		.height = cell_h,
+		.rec = rec,
+		.wall_flag = wall_flag,
+		.wall = wall
 	};
 	return cell;
 }
 
-Grid_T grid_new(int win_w, int win_h, int cell_w, int cell_h)
+/// GRID STUFF ====================
+Grid_T grid_new(int win_w, int win_h, float cell_w, float cell_h)
 {
 	Grid_T grid = {0};
 
@@ -44,10 +71,7 @@ void grid_render(Grid_T grid)
 	int line_thick = GRID_LINE_THICK;
 	for (int i = 0; i < grid.count; ++i) {
 		Cell_T cell = grid.items[i];
-		Rectangle rec = {
-			cell.x, cell.y,
-			cell.width, cell.height
-		};
+		Rectangle rec = cell.rec;
 		DrawRectangleLinesEx(rec, line_thick, WHITE);
 	}
 }
@@ -59,7 +83,7 @@ void grid_dump(Grid_T grid)
 			printf("\n");
 		}
 		Cell_T cell = grid.items[i];
-		printf("{%d,%d,%d,%d} ", cell.x, cell.y, cell.width, cell.height);
+		printf("{%f,%f,%f,%f} ", cell.rec.x, cell.rec.y, cell.rec.width, cell.rec.height);
 	}
 	printf("\n");
 }

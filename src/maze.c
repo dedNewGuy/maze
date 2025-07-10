@@ -11,7 +11,9 @@ int main(void)
 {
 	InitWindow(WIN_WIDTH, WIN_HEIGHT, WIN_TITLE); 
 
-	Grid_T grid = grid_new(WIN_WIDTH, WIN_HEIGHT, 30, 30);
+	int cell_w, cell_h;
+	cell_w = cell_h = 30;
+	Grid_T grid = grid_new(WIN_WIDTH, WIN_HEIGHT, cell_w, cell_w);
 
 	while (!WindowShouldClose()) {
 		BeginDrawing();
