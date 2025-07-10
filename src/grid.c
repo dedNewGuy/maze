@@ -68,11 +68,13 @@ Grid_T grid_new(int win_w, int win_h, float cell_w, float cell_h)
 void grid_render(Grid_T grid)
 {
 
-	int line_thick = GRID_LINE_THICK;
 	for (int i = 0; i < grid.count; ++i) {
 		Cell_T cell = grid.items[i];
-		Rectangle rec = cell.rec;
-		DrawRectangleLinesEx(rec, line_thick, WHITE);
+		Wall_T wall = cell.wall;
+		DrawLineEx(wall.top.start_pos, wall.top.end_pos, GRID_LINE_THICK, GRID_LINE_COLOR);
+		DrawLineEx(wall.right.start_pos, wall.right.end_pos, GRID_LINE_THICK, GRID_LINE_COLOR);
+		DrawLineEx(wall.bottom.start_pos, wall.bottom.end_pos, GRID_LINE_THICK, GRID_LINE_COLOR);
+		DrawLineEx(wall.left.start_pos, wall.left.end_pos, GRID_LINE_THICK, GRID_LINE_COLOR);
 	}
 }
 

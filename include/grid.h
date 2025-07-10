@@ -42,6 +42,7 @@ typedef struct {
 #define GRID_X_OFFSET 10
 #define GRID_Y_OFFSET 10
 #define GRID_LINE_THICK 1
+#define GRID_LINE_COLOR WHITE
 
 Grid_T grid_new(int win_w, int win_h, float cell_w, float cell_h);
 void grid_render(Grid_T grid);
