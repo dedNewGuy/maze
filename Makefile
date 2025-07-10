@@ -5,15 +5,11 @@ BUILD = build
 SRC = src
 
 BUILDS = $(BUILD)/maze.o
-SRCS = $(SRC)/maze.c
+SRCS = $(SRC)/maze.c $(SRC)/grid.c
 TARGET = maze
 
-$(BUILDS): $(SRCS)
-	$(CC) $(CFLAGS) -o $(BUILDS) -c $(SRCS)
-
-
-$(TARGET): $(BUILDS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(BUILDS) -lraylib -lm
+$(TARGET): $(SRCS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS) -lraylib -lm
 
 .PHONY = clean run
 

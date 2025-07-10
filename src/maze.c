@@ -1,7 +1,6 @@
 #include <stdio.h>
 
 #include "thirdparty/raylib.h"
-#include "util.h"
 #include "grid.h"
 
 #define WIN_WIDTH 800
