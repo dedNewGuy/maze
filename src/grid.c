@@ -71,10 +71,14 @@ void grid_render(Grid_T grid)
 	for (int i = 0; i < grid.count; ++i) {
 		Cell_T cell = grid.items[i];
 		Wall_T wall = cell.wall;
-		DrawLineEx(wall.top.start_pos, wall.top.end_pos, GRID_LINE_THICK, GRID_LINE_COLOR);
-		DrawLineEx(wall.right.start_pos, wall.right.end_pos, GRID_LINE_THICK, GRID_LINE_COLOR);
-		DrawLineEx(wall.bottom.start_pos, wall.bottom.end_pos, GRID_LINE_THICK, GRID_LINE_COLOR);
-		DrawLineEx(wall.left.start_pos, wall.left.end_pos, GRID_LINE_THICK, GRID_LINE_COLOR);
+		if (cell.wall_flag.top)
+			DrawLineEx(wall.top.start_pos, wall.top.end_pos, GRID_LINE_THICK, GRID_LINE_COLOR);
+		if (cell.wall_flag.right)
+			DrawLineEx(wall.right.start_pos, wall.right.end_pos, GRID_LINE_THICK, GRID_LINE_COLOR);
+		if (cell.wall_flag.bottom)
+			DrawLineEx(wall.bottom.start_pos, wall.bottom.end_pos, GRID_LINE_THICK, GRID_LINE_COLOR);	
+		if (cell.wall_flag.left)
+			DrawLineEx(wall.left.start_pos, wall.left.end_pos, GRID_LINE_THICK, GRID_LINE_COLOR);
 	}
 }
 
@@ -88,4 +92,10 @@ void grid_dump(Grid_T grid)
 		printf("{%f,%f,%f,%f} ", cell.rec.x, cell.rec.y, cell.rec.width, cell.rec.height);
 	}
 	printf("\n");
+}
+
+void grid_init_start_stop(Grid_T *grid)
+{
+    grid->items[0].wall_flag.top = false;
+    grid->items[grid->count - 1].wall_flag.bottom = false;
 }
