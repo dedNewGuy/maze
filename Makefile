@@ -1,5 +1,5 @@
 CC = cc 
-CFLAGS = -Wall -Wextra -I./include -L./build/raylib
+CFLAGS = -Wall -DDEBUG -Wextra -I./include -L./build/raylib
 
 BUILD = build
 SRC = src

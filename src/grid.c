@@ -1,7 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "grid.h"
 #include "minutil.h"
-#include "thirdparty/raylib.h"
 
 /// CELL STUFF ==================
 Wall_T wall_new(Rectangle rec)
@@ -35,7 +36,8 @@ Cell_T cell_new(float x, float y, float cell_w, float cell_h)
 	Cell_T cell = {
 		.rec = rec,
 		.wall_flag = wall_flag,
-		.wall = wall
+		.wall = wall,
+		.visited = false
 	};
 	return cell;
 }
@@ -52,6 +54,9 @@ Grid_T grid_new(int win_w, int win_h, float cell_w, float cell_h)
 
 	int x_cell_count = grid_w / cell_w;
 	int y_cell_count = grid_h / cell_h;
+
+	grid.x_cell_count = x_cell_count;
+	grid.y_cell_count = y_cell_count;	
 
 	for (int row = 0; row < y_cell_count; ++row) {
 		for (int col = 0; col < x_cell_count; ++col) {
@@ -113,4 +118,90 @@ void grid_init_start_stop(Grid_T *grid)
 {
     grid->items[0].wall_flag.top = false;
     grid->items[grid->count - 1].wall_flag.bottom = false;
+}
+
+static char *get_direction(int i, int x_cell_count, int val)
+{
+	int left = i - 1;
+	int right = i + 1;
+	int bottom = i + x_cell_count;
+	int top = i - x_cell_count;
+
+	if (val == left)
+		return WALL_LEFT;
+	if (val == right)
+		return WALL_RIGHT;
+	if (val == bottom)
+		return WALL_BOTTOM;
+	if (val == top)
+		return WALL_TOP;
+
+	return "";
+}
+
+void grid_disable_walls(Grid_T *grid, char *direction, int i)
+{
+	if (strcmp(direction, WALL_LEFT) == 0)
+		grid->items[i].wall_flag.left = false;
+	if (strcmp(direction, WALL_RIGHT) == 0)
+		grid->items[i].wall_flag.right = false;
+	if (strcmp(direction, WALL_BOTTOM) == 0)
+		grid->items[i].wall_flag.bottom = false;
+	if (strcmp(direction, WALL_TOP) == 0)
+		grid->items[i].wall_flag.top = false;
+}
+
+static char *get_opposite_direction(char *direction)
+{
+	if (strcmp(direction, WALL_LEFT) == 0)
+		return WALL_RIGHT;
+	if (strcmp(direction, WALL_RIGHT) == 0)
+		return WALL_LEFT;
+	if (strcmp(direction, WALL_BOTTOM) == 0)
+		return WALL_TOP;
+	if (strcmp(direction, WALL_TOP) == 0)
+		return WALL_BOTTOM;
+	return "";
+}
+
+void grid_break_walls(Grid_T *grid, int i)
+{
+	grid->items[i].visited = true;
+	int horizontal_cell_count = grid->x_cell_count;
+	int CELL_COUNT = 4;
+	while (1) {
+		// Left, Right, Top, Bottom
+		int available_cell[4] = {-1, -1, -1, -1}; // Initialize available with -1
+		int possible_cell[4] = {i-1, i+1, i-horizontal_cell_count, i+horizontal_cell_count};
+		for (int j = 0; j < CELL_COUNT; ++j) {
+			int idx = possible_cell[j];
+			if (idx >= 0 && idx < grid->count) {
+				if (!grid->items[idx].visited)
+					available_cell[j] = idx;
+			}
+		}
+
+		bool empty = true;
+		for (int j = 0; j < CELL_COUNT; ++j) {
+			if (available_cell[j] > 0) {
+				empty = false;
+				break;
+			}
+		}
+
+		if (empty) return;
+
+		int rand_idx = rand() % CELL_COUNT;
+		while (available_cell[rand_idx] < 0)
+			rand_idx = rand() % CELL_COUNT;
+
+		int next_cell = available_cell[rand_idx];
+		char *chosen_direct = get_direction(i, horizontal_cell_count, next_cell);
+		assert(strcmp(chosen_direct, "") != 0);
+		grid_disable_walls(grid, chosen_direct, i);
+		char *opposite_direct = get_opposite_direction(chosen_direct);
+		assert(strcmp(opposite_direct, "") != 0);		
+		grid_disable_walls(grid, opposite_direct, next_cell);
+		grid_break_walls(grid, next_cell);
+	}
 }

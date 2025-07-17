@@ -5,6 +5,11 @@
 #include "thirdparty/raylib.h"
 
 /// CELL STUFF ==================
+#define WALL_TOP "top"
+#define WALL_BOTTOM "bottom"
+#define WALL_RIGHT "right"
+#define WALL_LEFT "left"
+
 typedef struct {
 	Vector2 start_pos;
 	Vector2 end_pos;
@@ -28,6 +33,7 @@ typedef struct {
 	Wall_T wall;
 	Rectangle rec;
 	Wall_Flag_T wall_flag;
+	bool visited;
 } Cell_T;
 
 Cell_T cell_new(float x, float y, float cell_w, float cell_h);
@@ -37,6 +43,8 @@ typedef struct {
 	Cell_T *items;
 	int count;
 	int cap;
+	int x_cell_count;
+	int y_cell_count;
 } Grid_T;
 
 #define GRID_X_OFFSET 10
@@ -49,5 +57,6 @@ void grid_render(Grid_T grid);
 void grid_render_i(Grid_T grid, int i);
 void grid_dump(Grid_T grid);
 void grid_init_start_stop(Grid_T *grid);
-
+void grid_break_walls(Grid_T *grid, int i);
+	
 #endif // GRID_H_
