@@ -1,7 +1,7 @@
 #include <stdio.h>
-
 #include "grid.h"
 #include "minutil.h"
+#include "thirdparty/raylib.h"
 
 /// CELL STUFF ==================
 Wall_T wall_new(Rectangle rec)
@@ -80,6 +80,21 @@ void grid_render(Grid_T grid)
 		if (cell.wall_flag.left)
 			DrawLineEx(wall.left.start_pos, wall.left.end_pos, GRID_LINE_THICK, GRID_LINE_COLOR);
 	}
+}
+
+void grid_render_i(Grid_T grid, int i)
+{
+	if (i >= grid.count) return;
+	Cell_T cell = grid.items[i];
+	Wall_T wall = cell.wall;
+	if (cell.wall_flag.top)
+		DrawLineEx(wall.top.start_pos, wall.top.end_pos, GRID_LINE_THICK, GRID_LINE_COLOR);
+	if (cell.wall_flag.right)
+		DrawLineEx(wall.right.start_pos, wall.right.end_pos, GRID_LINE_THICK, GRID_LINE_COLOR);
+	if (cell.wall_flag.bottom)
+		DrawLineEx(wall.bottom.start_pos, wall.bottom.end_pos, GRID_LINE_THICK, GRID_LINE_COLOR);	
+	if (cell.wall_flag.left)
+		DrawLineEx(wall.left.start_pos, wall.left.end_pos, GRID_LINE_THICK, GRID_LINE_COLOR);
 }
 
 void grid_dump(Grid_T grid)

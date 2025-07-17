@@ -46,6 +46,7 @@ typedef struct {
 
 Grid_T grid_new(int win_w, int win_h, float cell_w, float cell_h);
 void grid_render(Grid_T grid);
+void grid_render_i(Grid_T grid, int i);
 void grid_dump(Grid_T grid);
 void grid_init_start_stop(Grid_T *grid);
 
