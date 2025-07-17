@@ -176,6 +176,9 @@ void grid_break_walls(Grid_T *grid, int i)
 		for (int j = 0; j < CELL_COUNT; ++j) {
 			int idx = possible_cell[j];
 			if (idx >= 0 && idx < grid->count) {
+				// Handling sides / edges / at the end or start row
+				if (j == 0 && i % horizontal_cell_count == 0) continue;
+				if (j == 1 && (i + 1) % (horizontal_cell_count) == 0) continue;
 				if (!grid->items[idx].visited)
 					available_cell[j] = idx;
 			}

@@ -39,7 +39,7 @@ int main(void)
 		BeginDrawing();
 		grid_render_i(grid, i);
 		EndDrawing();
-		WaitTime(0.1);
+		WaitTime(0.01);
 		++i;
 	}
 #endif // DEBUG
