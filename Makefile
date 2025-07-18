@@ -11,7 +11,7 @@ TARGET = maze
 $(TARGET): $(SRCS)
 	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS) -lraylib -lm
 
-.PHONY = clean run
+.PHONY: clean run
 
 run: $(TARGET)
 	./$(TARGET)
