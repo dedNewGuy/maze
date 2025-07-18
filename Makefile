@@ -1,10 +1,8 @@
 CC = cc 
-CFLAGS = -Wall -Wextra -I./include -L./build/raylib
+CFLAGS = -Wall -Wextra -I./include -L./raylib
 
-BUILD = build
 SRC = src
 
-BUILDS = $(BUILD)/maze.o
 SRCS = $(SRC)/maze.c $(SRC)/grid.c
 TARGET = maze
 
